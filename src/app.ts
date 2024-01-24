@@ -1,15 +1,21 @@
 import * as express from "express";
-import * as dotenv from "dotenv";
+import { join } from "path";
+import { appConfig } from "./config";
+import { router } from "./routes";
 
-dotenv.config();
+import type { Request, Response } from "express";
 
 const app: express.Express = express();
-const port = process.env.PORT || 3000;
 
-app.get("/", (req: express.Request, res: express.Response) => {
-  res.send("Root page");
+// Serve static files (HTML, CSS, JavaScript)
+app.use(express.static(join(__dirname, "public")));
+app.get("/", (_req: Request, res: Response) => {
+  res.sendFile(join(__dirname, "public", "index.html"));
 });
 
-app.listen(port, () => {
-  console.log(`[server]: Server is running at http://localhost:${port}`);
+// routing
+app.use("/", router);
+
+app.listen(appConfig.port, () => {
+  console.log(`[server]: Server is running at http://localhost:${appConfig.port}`);
 });
