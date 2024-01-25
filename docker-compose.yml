@@ -1,0 +1,27 @@
+# =============================================================================
+#  DMP Docker bootstrap
+#
+#  Please, use the versions instead of latest where possible
+#  Use environment variables where possible to avoid hardcoding the credentials
+# =============================================================================
+version: "4.0"
+
+services:
+  port-forwarder:
+    image: port-forwarder:0.0.1
+    container_name: port-forwarder
+    platform: linux/amd64
+    environment:
+      - PORT=3000
+      - SESSION_CREDENTIALS=${SESSION_CREDENTIALS}
+      - DEFAULT_SERVICES_OBJECT=${DEFAULT_SERVICES_OBJECT}
+    ports:
+      - 3100:3100
+      - 3200:3200
+      - 3300:3300
+    networks:
+      - dmp
+
+networks:
+  dmp:
+    driver: bridge

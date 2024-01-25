@@ -20,11 +20,5 @@ class AppConfig {
       : undefined;
   }
 }
-// const boo: DefaultServicesObject = {
-//   dmp: [
-//     { name: "svc/dmp-asp-companies-bff", localPort: 3100, clusterPort: 3000 },
-//     { name: "svc/dmp-asp-members-bff", localPort: 3100, clusterPort: 3000 },
-//     { name: "svc/dmp-asp-skills-catalog-bff", localPort: 3100, clusterPort: 3000 },
-//   ],
-// };
+
 export const appConfig = new AppConfig();

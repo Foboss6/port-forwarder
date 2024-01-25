@@ -24,9 +24,10 @@ export class PortForwarderService {
     const logContext = `PortForwarderService.forwardService -> service: ${serviceName}`;
 
     this.logger.log(`Forwarding ${serviceName} ${clusterPort} -> ${localPort}`, logContext);
+    const creds = appConfig.sessionCredentials.get();
 
     const forwardingProcess = spawn(
-      `${appConfig.sessionCredentials.get()} && kubectl -n ${namespace} port-forward ${serviceName} ${localPort}:${clusterPort}`,
+      `${creds ? `${creds} && ` : ""}kubectl -n ${namespace} port-forward ${serviceName} ${localPort}:${clusterPort}`,
       { shell: true }
     );
 

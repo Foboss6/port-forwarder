@@ -11,7 +11,10 @@ export class SessionCredentials {
   }
 
   set(creds: string) {
-    if (!this.checkCreds(creds)) return false;
+    if (!this.checkCreds(creds)) {
+      this.status = "fail";
+      return false;
+    }
 
     this.creds = creds;
     this.status = "ok";
@@ -32,6 +35,6 @@ export class SessionCredentials {
   }
 
   constructor(creds?: string) {
-    this.set(creds ?? "");
+    if (creds) this.set(creds);
   }
 }
