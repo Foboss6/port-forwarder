@@ -25,9 +25,14 @@ export class PortForwarderService {
 
     this.logger.log(`Forwarding ${serviceName} ${clusterPort} -> ${localPort}`, logContext);
     const creds = appConfig.sessionCredentials.get();
+    // console.log(
+    //   `${creds ? `${creds} && ` : ""}kubectl -n ${namespace} port-forward ${serviceName} ${localPort}:${clusterPort}`
+    // );
 
     const forwardingProcess = spawn(
-      `${creds ? `${creds} && ` : ""}kubectl -n ${namespace} port-forward ${serviceName} ${localPort}:${clusterPort}`,
+      `${
+        creds ? `${creds} && ` : ""
+      }echo $AWS_ACCESS_KEY_ID && kubectl version && kubectl -n ${namespace} port-forward ${serviceName} ${localPort}:${clusterPort}`,
       { shell: true }
     );
 
@@ -38,7 +43,9 @@ export class PortForwarderService {
     forwardingProcess.once("close", (code) => this.logger.log(`Closed spawned process with code: ${code}`, logContext));
 
     // TODO: check this
-    forwardingProcess.stdout.on("data", (data) => this.logger.debug(data.toString(), logContext));
-    forwardingProcess.stdout.on("error", (error) => this.logger.error(error.message, logContext));
+    forwardingProcess.stdout.on("data", (data) => console.log(data.toString()));
+    forwardingProcess.stdout.on("error", (error) => console.error(error.message));
+    forwardingProcess.stderr.on("data", (data) => console.error(data.toString()));
+    forwardingProcess.stderr.on("error", (error) => console.error(error.message));
   }
 }
